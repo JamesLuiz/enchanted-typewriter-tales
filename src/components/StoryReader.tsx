@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Play, Pause } from 'lucide-react';
+import { ArrowLeft, Play, Pause, Download } from 'lucide-react';
 import { TypewriterText } from './TypewriterText';
 import { AnimatedBackground } from './AnimatedBackground';
 
@@ -23,6 +23,19 @@ export const StoryReader = ({ story, onBack }: StoryReaderProps) => {
 
   const handleStartReading = () => {
     setIsReading(true);
+  };
+
+  const handleDownload = () => {
+    const storyText = `${story.title}\nBy ${story.author}\n\n${story.content}`;
+    const blob = new Blob([storyText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${story.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -58,8 +71,21 @@ export const StoryReader = ({ story, onBack }: StoryReaderProps) => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-2">{story.title}</h1>
-                <p className="text-accent font-medium text-sm sm:text-base">by {story.author}</p>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 mb-2">
+                  <div className="text-center sm:text-left">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">{story.title}</h1>
+                    <p className="text-accent font-medium text-sm sm:text-base">by {story.author}</p>
+                  </div>
+                  <Button 
+                    onClick={handleDownload}
+                    variant="outline"
+                    size="sm"
+                    className="bg-secondary/20 hover:bg-secondary/30 text-secondary-foreground border-secondary/30 flex items-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span className="hidden sm:inline">Download</span>
+                  </Button>
+                </div>
               </motion.div>
 
               <motion.div 

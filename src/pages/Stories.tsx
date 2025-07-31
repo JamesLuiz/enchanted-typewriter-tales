@@ -168,6 +168,7 @@ export const Stories = () => {
                 preview={story.preview}
                 author={story.author}
                 readTime={story.readTime}
+                content={story.content}
                 onRead={() => handleReadStory(story)}
               />
             </motion.div>
@@ -186,6 +187,7 @@ export const Stories = () => {
                       preview={story.preview}
                       author={story.author}
                       readTime={story.readTime}
+                      content={story.content}
                       onRead={() => handleReadStory(story)}
                     />
                   </div>

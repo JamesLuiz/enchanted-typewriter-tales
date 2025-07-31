@@ -61,18 +61,18 @@ export const Navigation = ({ isMusicPlaying, onToggleMusic }: NavigationProps) =
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+      <div className="container mx-auto px-3 sm:px-6 py-2 sm:py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
-            <h1 className="text-lg sm:text-2xl font-bold bg-gradient-mystical bg-clip-text text-transparent">
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <BookOpen className="h-5 w-5 sm:h-8 sm:w-8 text-primary" />
+            <h1 className="text-base sm:text-2xl font-bold bg-gradient-mystical bg-clip-text text-transparent">
               <span className="hidden sm:inline">Enchanted Tales</span>
               <span className="sm:hidden">Tales</span>
             </h1>
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
             <NavigationItems />
           </div>
 
@@ -80,12 +80,12 @@ export const Navigation = ({ isMusicPlaying, onToggleMusic }: NavigationProps) =
           <div className="md:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-5 w-5" />
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                  <Menu className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] bg-card/95 backdrop-blur-xl">
-                <div className="flex flex-col space-y-4 mt-8">
+              <SheetContent side="right" className="w-[250px] sm:w-[280px] bg-card/95 backdrop-blur-xl">
+                <div className="flex flex-col space-y-3 mt-6">
                   <NavigationItems mobile={true} onItemClick={() => setIsOpen(false)} />
                 </div>
               </SheetContent>

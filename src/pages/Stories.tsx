@@ -175,23 +175,25 @@ export const Stories = () => {
         </div>
 
         {/* Mobile Carousel View */}
-        <div className="md:hidden max-w-xs sm:max-w-sm mx-auto px-4">
-          <Carousel className="w-full">
-            <CarouselContent>
+        <div className="md:hidden">
+          <Carousel className="w-full max-w-[280px] sm:max-w-sm mx-auto px-2">
+            <CarouselContent className="ml-0">
               {filteredStories.map((story) => (
-                <CarouselItem key={story.id}>
-                  <StoryCard
-                    title={story.title}
-                    preview={story.preview}
-                    author={story.author}
-                    readTime={story.readTime}
-                    onRead={() => handleReadStory(story)}
-                  />
+                <CarouselItem key={story.id} className="pl-2 basis-full">
+                  <div className="p-1">
+                    <StoryCard
+                      title={story.title}
+                      preview={story.preview}
+                      author={story.author}
+                      readTime={story.readTime}
+                      onRead={() => handleReadStory(story)}
+                    />
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="bg-card/80 backdrop-blur-md border-border" />
-            <CarouselNext className="bg-card/80 backdrop-blur-md border-border" />
+            <CarouselPrevious className="bg-card/90 backdrop-blur-md border-border h-8 w-8 -left-8 sm:-left-12" />
+            <CarouselNext className="bg-card/90 backdrop-blur-md border-border h-8 w-8 -right-8 sm:-right-12" />
           </Carousel>
         </div>
 

@@ -126,30 +126,30 @@ export const Stories = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-12 relative">
+    <div className="min-h-screen pt-20 sm:pt-24 pb-8 sm:pb-12 relative">
       <AnimatedBackground />
       
-      <div className="relative z-20 container mx-auto px-6">
+      <div className="relative z-20 container mx-auto px-4 sm:px-6">
         <motion.div 
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-mystical bg-clip-text text-transparent mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold bg-gradient-mystical bg-clip-text text-transparent mb-4">
             Enchanted Tales
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
             Discover magical stories that transport you to mystical realms where anything is possible
           </p>
           
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <div className="relative max-w-md mx-auto px-4">
+            <Search className="absolute left-7 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search stories, authors..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-card/80 backdrop-blur-md border-border"
+              className="pl-10 bg-card/80 backdrop-blur-md border-border text-sm sm:text-base"
             />
           </div>
         </motion.div>
@@ -175,7 +175,7 @@ export const Stories = () => {
         </div>
 
         {/* Mobile Carousel View */}
-        <div className="md:hidden max-w-sm mx-auto">
+        <div className="md:hidden max-w-xs sm:max-w-sm mx-auto px-4">
           <Carousel className="w-full">
             <CarouselContent>
               {filteredStories.map((story) => (

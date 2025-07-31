@@ -99,21 +99,21 @@ export const Create = () => {
 
   return (
     <div 
-      className="min-h-screen pt-24 pb-12 bg-cover bg-center bg-fixed"
+      className="min-h-screen pt-20 sm:pt-24 pb-8 sm:pb-12 bg-cover bg-center bg-fixed"
       style={{ backgroundImage: `url(${snowyForestBg})` }}
     >
       <div className="absolute inset-0 bg-background/80"></div>
-      <div className="relative z-10 container mx-auto px-6 max-w-4xl">
-        <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-mystical bg-clip-text text-transparent mb-4">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-4xl">
+        <div className="text-center mb-8 sm:mb-12 animate-fade-in">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold bg-gradient-mystical bg-clip-text text-transparent mb-4">
             Create Your Tale
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg sm:text-xl text-muted-foreground px-4">
             Share your magical stories with the world
           </p>
         </div>
 
-        <Card className="p-8 bg-gradient-story shadow-enchanted animate-fade-in">
+        <Card className="p-4 sm:p-6 lg:p-8 bg-gradient-story shadow-enchanted animate-fade-in">
           {uploadSuccess ? (
             <div className="text-center py-12">
               <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
@@ -122,7 +122,7 @@ export const Create = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="title">Story Title</Label>
                   <Input
@@ -182,11 +182,11 @@ export const Create = () => {
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Write your magical story here... or upload a file above."
-                  className="min-h-[300px] bg-card resize-none"
+                  className="min-h-[200px] sm:min-h-[300px] bg-card resize-none text-sm sm:text-base"
                 />
                 
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                  <FileText className="h-4 w-4" />
+                <div className="flex items-start space-x-2 text-xs sm:text-sm text-muted-foreground">
+                  <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
                   <span>Supported formats: .txt (PDF and DOCX support coming soon!)</span>
                 </div>
               </div>
@@ -195,7 +195,7 @@ export const Create = () => {
                 <Button 
                   type="submit" 
                   size="lg"
-                  className="px-8"
+                  className="px-6 sm:px-8 w-full sm:w-auto"
                   disabled={!title || !author || !content}
                 >
                   Publish Your Tale

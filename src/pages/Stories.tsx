@@ -1,7 +1,17 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Search } from 'lucide-react';
 import { StoryCard } from '@/components/StoryCard';
 import { StoryReader } from '@/components/StoryReader';
-import enchantedForestBg from '@/assets/enchanted-forest-bg.jpg';
+import { AnimatedBackground } from '@/components/AnimatedBackground';
+import { Input } from '@/components/ui/input';
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from '@/components/ui/carousel';
 
 interface Story {
   id: string;
@@ -95,6 +105,7 @@ The garden returned to its natural rhythm, but now each sister understood that t
 
 export const Stories = () => {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleReadStory = (story: Story) => {
     setSelectedStory(story);
@@ -104,38 +115,97 @@ export const Stories = () => {
     setSelectedStory(null);
   };
 
+  const filteredStories = sampleStories.filter(story =>
+    story.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    story.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    story.preview.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (selectedStory) {
     return <StoryReader story={selectedStory} onBack={handleBackToStories} />;
   }
 
   return (
-    <div 
-      className="min-h-screen pt-24 pb-12 bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: `url(${enchantedForestBg})` }}
-    >
-      <div className="absolute inset-0 bg-background/70"></div>
-      <div className="relative z-10 container mx-auto px-6">
-        <div className="text-center mb-12 animate-fade-in">
+    <div className="min-h-screen pt-24 pb-12 relative">
+      <AnimatedBackground />
+      
+      <div className="relative z-20 container mx-auto px-6">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-mystical bg-clip-text text-transparent mb-4">
             Enchanted Tales
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Discover magical stories that transport you to mystical realms where anything is possible
           </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-          {sampleStories.map((story) => (
-            <StoryCard
-              key={story.id}
-              title={story.title}
-              preview={story.preview}
-              author={story.author}
-              readTime={story.readTime}
-              onRead={() => handleReadStory(story)}
+          
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search stories, authors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-card/80 backdrop-blur-md border-border"
             />
+          </div>
+        </motion.div>
+
+        {/* Desktop Grid View */}
+        <div className="hidden md:grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+          {filteredStories.map((story, index) => (
+            <motion.div
+              key={story.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+            >
+              <StoryCard
+                title={story.title}
+                preview={story.preview}
+                author={story.author}
+                readTime={story.readTime}
+                onRead={() => handleReadStory(story)}
+              />
+            </motion.div>
           ))}
         </div>
+
+        {/* Mobile Carousel View */}
+        <div className="md:hidden max-w-sm mx-auto">
+          <Carousel className="w-full">
+            <CarouselContent>
+              {filteredStories.map((story) => (
+                <CarouselItem key={story.id}>
+                  <StoryCard
+                    title={story.title}
+                    preview={story.preview}
+                    author={story.author}
+                    readTime={story.readTime}
+                    onRead={() => handleReadStory(story)}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="bg-card/80 backdrop-blur-md border-border" />
+            <CarouselNext className="bg-card/80 backdrop-blur-md border-border" />
+          </Carousel>
+        </div>
+
+        {filteredStories.length === 0 && searchQuery && (
+          <motion.div 
+            className="text-center py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <p className="text-muted-foreground text-lg">
+              No stories found matching "{searchQuery}"
+            </p>
+          </motion.div>
+        )}
       </div>
     </div>
   );

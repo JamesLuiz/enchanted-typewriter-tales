@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { BookOpen, PenTool, Volume2, VolumeX } from 'lucide-react';
+import { BookOpen, PenTool, Volume2, VolumeX, Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface NavigationProps {
   isMusicPlaying: boolean;
@@ -8,6 +9,7 @@ interface NavigationProps {
 }
 
 export const Navigation = ({ isMusicPlaying, onToggleMusic }: NavigationProps) => {
+  const { theme, setTheme } = useTheme();
   const location = useLocation();
 
   return (
@@ -45,8 +47,16 @@ export const Navigation = ({ isMusicPlaying, onToggleMusic }: NavigationProps) =
             <Button
               variant="ghost"
               size="icon"
-              onClick={onToggleMusic}
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="ml-4"
+            >
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onToggleMusic}
             >
               {isMusicPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             </Button>

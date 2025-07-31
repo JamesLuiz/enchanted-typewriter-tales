@@ -8,51 +8,59 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Magical storytelling design system - #7A918D, #A18276, #736372, #AAC0AA, #DCEED1 */
+    --background: 120 25% 92%; /* #DCEED1 - soft sage background */
+    --foreground: 300 8% 25%; /* #736372 - deep plum text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 120 15% 95%; /* slightly lighter than background */
+    --card-foreground: 300 8% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 120 15% 95%;
+    --popover-foreground: 300 8% 25%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 180 15% 55%; /* #7A918D - mystical teal */
+    --primary-foreground: 120 25% 92%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 25 15% 55%; /* #A18276 - warm earth */
+    --secondary-foreground: 120 25% 92%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 120 20% 75%; /* #AAC0AA - soft sage */
+    --muted-foreground: 300 8% 35%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 300 8% 45%; /* #736372 - enchanted plum */
+    --accent-foreground: 120 25% 92%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 120 20% 85%;
+    --input: 120 20% 85%;
+    --ring: 180 15% 55%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Magical gradients and effects */
+    --gradient-mystical: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    --gradient-enchanted: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    --gradient-story: linear-gradient(45deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    
+    /* Magical shadows */
+    --shadow-story: 0 10px 30px -5px hsl(var(--primary) / 0.3);
+    --shadow-enchanted: 0 20px 60px -10px hsl(var(--accent) / 0.4);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.2);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Transitions */
+    --transition-magical: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-typewriter: all 0.8s ease-in-out;
 
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 120 25% 90%;
+    --sidebar-foreground: 300 8% 25%;
+    --sidebar-primary: 180 15% 55%;
+    --sidebar-primary-foreground: 120 25% 92%;
+    --sidebar-accent: 120 20% 85%;
+    --sidebar-accent-foreground: 300 8% 25%;
+    --sidebar-border: 120 20% 80%;
+    --sidebar-ring: 180 15% 55%;
   }
 
   .dark {

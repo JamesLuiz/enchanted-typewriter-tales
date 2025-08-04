@@ -119,7 +119,12 @@ export const Stories = () => {
   useEffect(() => {
     if (!api) return;
 
-    api.on("select", () => onSlideChange(api));
+    const onSelect = () => onSlideChange(api);
+    api.on("select", onSelect);
+    
+    return () => {
+      api.off("select", onSelect);
+    };
   }, [api, onSlideChange]);
 
   const handleReadStory = (story: Story) => {

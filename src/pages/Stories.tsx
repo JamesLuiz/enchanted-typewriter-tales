@@ -177,11 +177,36 @@ export const Stories = () => {
 
         {/* Mobile Carousel View */}
         <div className="md:hidden">
-          <Carousel className="w-full max-w-[280px] sm:max-w-sm mx-auto px-2">
+          <Carousel 
+            className="w-full max-w-[320px] sm:max-w-md mx-auto px-4"
+            opts={{
+              align: "center",
+              loop: true,
+              skipSnaps: false,
+              dragFree: false,
+            }}
+          >
             <CarouselContent className="ml-0">
-              {filteredStories.map((story) => (
+              {filteredStories.map((story, index) => (
                 <CarouselItem key={story.id} className="pl-2 basis-full">
-                  <div className="p-1">
+                  <motion.div 
+                    className="p-1"
+                    initial={{ opacity: 0, rotateY: -15, scale: 0.9 }}
+                    animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotateY: 15, scale: 0.8 }}
+                    transition={{ 
+                      duration: 0.6, 
+                      ease: [0.25, 0.1, 0.25, 1],
+                      delay: index * 0.1 
+                    }}
+                    whileInView={{ 
+                      opacity: 1, 
+                      rotateY: 0, 
+                      scale: 1,
+                      transition: { duration: 0.4, ease: "easeOut" }
+                    }}
+                    style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
+                  >
                     <StoryCard
                       title={story.title}
                       preview={story.preview}
@@ -190,12 +215,20 @@ export const Stories = () => {
                       content={story.content}
                       onRead={() => handleReadStory(story)}
                     />
-                  </div>
+                  </motion.div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="bg-card/90 backdrop-blur-md border-border h-8 w-8 -left-8 sm:-left-12" />
-            <CarouselNext className="bg-card/90 backdrop-blur-md border-border h-8 w-8 -right-8 sm:-right-12" />
+            
+            {/* Pagination Dots */}
+            <div className="flex justify-center space-x-2 mt-6">
+              {filteredStories.map((_, index) => (
+                <div
+                  key={index}
+                  className="w-2 h-2 rounded-full bg-muted-foreground/30 transition-all duration-300 hover:bg-primary/50"
+                />
+              ))}
+            </div>
           </Carousel>
         </div>
 

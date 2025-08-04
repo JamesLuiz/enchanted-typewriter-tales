@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useCallback, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { StoryCard } from '@/components/StoryCard';
 import { StoryReader } from '@/components/StoryReader';
@@ -10,7 +10,8 @@ import {
   CarouselContent, 
   CarouselItem, 
   CarouselNext, 
-  CarouselPrevious 
+  CarouselPrevious,
+  type CarouselApi 
 } from '@/components/ui/carousel';
 
 interface Story {
@@ -106,6 +107,20 @@ The garden returned to its natural rhythm, but now each sister understood that t
 export const Stories = () => {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+
+  const onSlideChange = useCallback((api: CarouselApi) => {
+    if (!api) return;
+    setCurrentSlide(api.selectedScrollSnap());
+  }, []);
+
+  // Effect to listen for slide changes
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => onSlideChange(api));
+  }, [api, onSlideChange]);
 
   const handleReadStory = (story: Story) => {
     setSelectedStory(story);
@@ -178,54 +193,102 @@ export const Stories = () => {
         {/* Mobile Carousel View */}
         <div className="md:hidden">
           <Carousel 
+            setApi={setApi}
             className="w-full max-w-[320px] sm:max-w-md mx-auto px-4"
             opts={{
               align: "center",
               loop: true,
               skipSnaps: false,
               dragFree: false,
+              duration: 25,
             }}
           >
             <CarouselContent className="ml-0">
-              {filteredStories.map((story, index) => (
-                <CarouselItem key={story.id} className="pl-2 basis-full">
-                  <motion.div 
-                    className="p-1"
-                    initial={{ opacity: 0, rotateY: -15, scale: 0.9 }}
-                    animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                    exit={{ opacity: 0, rotateY: 15, scale: 0.8 }}
-                    transition={{ 
-                      duration: 0.6, 
-                      ease: [0.25, 0.1, 0.25, 1],
-                      delay: index * 0.1 
-                    }}
-                    whileInView={{ 
-                      opacity: 1, 
-                      rotateY: 0, 
-                      scale: 1,
-                      transition: { duration: 0.4, ease: "easeOut" }
-                    }}
-                    style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
-                  >
-                    <StoryCard
-                      title={story.title}
-                      preview={story.preview}
-                      author={story.author}
-                      readTime={story.readTime}
-                      content={story.content}
-                      onRead={() => handleReadStory(story)}
-                    />
-                  </motion.div>
-                </CarouselItem>
-              ))}
+              {filteredStories.map((story, index) => {
+                const isActive = index === currentSlide;
+                const distance = Math.abs(index - currentSlide);
+                
+                return (
+                  <CarouselItem key={story.id} className="pl-2 basis-full">
+                    <motion.div 
+                      className="p-1 relative"
+                      style={{ 
+                        transformStyle: "preserve-3d",
+                        perspective: "1200px"
+                      }}
+                      animate={{
+                        rotateY: isActive ? 0 : distance > 1 ? (index < currentSlide ? -45 : 45) : (index < currentSlide ? -25 : 25),
+                        scale: isActive ? 1 : distance > 1 ? 0.7 : 0.85,
+                        opacity: isActive ? 1 : distance > 1 ? 0.3 : 0.6,
+                        x: isActive ? 0 : distance > 1 ? (index < currentSlide ? -100 : 100) : (index < currentSlide ? -50 : 50),
+                        z: isActive ? 0 : -distance * 100,
+                      }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                        mass: 0.8
+                      }}
+                      initial={{ 
+                        rotateY: -90, 
+                        scale: 0.5, 
+                        opacity: 0,
+                        x: 100
+                      }}
+                      whileInView={{ 
+                        rotateY: isActive ? 0 : -15,
+                        scale: isActive ? 1 : 0.85,
+                        opacity: 1,
+                        x: 0,
+                        transition: { 
+                          duration: 0.8, 
+                          ease: "easeOut",
+                          delay: index * 0.1
+                        }
+                      }}
+                    >
+                      <div
+                        className="relative"
+                        style={{
+                          transformOrigin: "center center",
+                          filter: isActive ? "none" : "blur(1px)",
+                        }}
+                      >
+                        <StoryCard
+                          title={story.title}
+                          preview={story.preview}
+                          author={story.author}
+                          readTime={story.readTime}
+                          content={story.content}
+                          onRead={() => handleReadStory(story)}
+                        />
+                        {!isActive && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/10 to-background/30 pointer-events-none" />
+                        )}
+                      </div>
+                    </motion.div>
+                  </CarouselItem>
+                );
+              })}
             </CarouselContent>
             
             {/* Pagination Dots */}
             <div className="flex justify-center space-x-2 mt-6">
               {filteredStories.map((_, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="w-2 h-2 rounded-full bg-muted-foreground/30 transition-all duration-300 hover:bg-primary/50"
+                  className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    index === currentSlide 
+                      ? 'bg-primary w-6' 
+                      : 'bg-muted-foreground/30 hover:bg-primary/50'
+                  }`}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => {
+                    if (api) {
+                      api.scrollTo(index);
+                    }
+                  }}
                 />
               ))}
             </div>
